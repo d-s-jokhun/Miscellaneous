@@ -19,8 +19,6 @@ def Import_Img (path, ScaleFactor=1, ImgSize=0, GrayScale=0):
         img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
     elif GrayScale==1:
         img = cv2.imread(path, cv2.IMREAD_UNCHANGED).astype(np.float32)
-        img = np.subtract(img, np.amin(img))
-        img = np.divide(img, np.amax(img))
         
     W = math.floor(img.shape[1] * ScaleFactor)
     H = math.floor(img.shape[0] * ScaleFactor)
@@ -29,6 +27,10 @@ def Import_Img (path, ScaleFactor=1, ImgSize=0, GrayScale=0):
         return
     
     img = cv2.resize(img, (W,H))
+    
+    if GrayScale==1:
+        img = np.subtract(img, np.amin(img))
+        img = np.divide(img, np.amax(img))
     
     width_to_pad=ImgSize-img.shape[1]
     height_to_pad=ImgSize-img.shape[0]
